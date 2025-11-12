@@ -1,0 +1,76 @@
+﻿{% extends 'movie_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-plus-circle"></i> ДОБАВИТЬ НОВЫЙ ФИЛЬМ</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Выбор места сохранения -->
+                    <div class="card mb-4 border-warning">
+                        <div class="card-header bg-warning">
+                            <strong>📁 КУДА СОХРАНИТЬ ДАННЫЕ?</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for choice in form.save_to %}
+                                <div class="col-md-4 mb-2">
+                                    <div class="form-check">
+                                        {{ choice.tag }}
+                                        <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                            {{ choice.choice_label }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Поля формы -->
+                    <div class="row">
+                        {% for field in form %}
+                        {% if field.name != 'save_to' %}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                            <div class="text-danger small">
+                                {% for error in field.errors %}⚠ {{ error }}{% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle"></i> Сохранить фильм
+                        </button>
+                        <a href="{% url 'movie_app:movie_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Назад
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        border-radius: 0.5rem;
+    }
+
+    .form-check-input:checked {
+        background-color: #198754;
+        border-color: #198754;
+    }
+</style>
+{% endblock %}
